@@ -1,0 +1,36 @@
+<ion-content>
+    <ion-list>
+        <!-- Start of item -->
+        <ion-item *ngFor="let termin of terminList" class="mainCard" no-padding [ngClass]="getMainClass(termin)">
+            <!-- Start main card -->
+            <button ion-item no-lines no-padding (click)="toggleExpanded(termin)" (press)="makeNote(termin)">
+                <ion-grid no-padding>
+                    <ion-row align-items-center text-wrap>
+                        <div class="indicator"></div>
+                        <ion-col col-2 class="time">
+                            <h2><b>{{ prepareTime(termin.Uhrzeit) }}</b></h2>
+                        </ion-col>
+                        <ion-col>
+                            <h2>{{ termin.Titel }}</h2>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </button>
+            <!-- End main card -->
+            <!-- Start detail list -->
+            <ion-list *ngIf="termin.expanded">
+                <ion-card *ngFor="let detail of termin.details" class="detailCard">
+                    <button ion-button *ngIf="detail.BeschreibungTyp == noteType" class="noteCard" small full no-margin no-lines color="danger"
+                        (press)="editNote(termin, detail)">
+                            <p margin-top margin-bottom class="content" > {{ detail.Beschreibung }}</p>
+                    </button>
+                    <div *ngIf="detail.BeschreibungTyp != noteType" class="infoCard">
+                        <p class="content">{{ prepareText(detail.Beschreibung) }}</p>
+                    </div>
+                </ion-card>
+            </ion-list>
+            <!-- End detail list -->
+        </ion-item>
+        <!-- End of item -->
+    </ion-list>
+</ion-content>

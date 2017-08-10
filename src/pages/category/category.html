@@ -1,0 +1,3 @@
+<super-tabs id="mainTabs" [config]="{ sideMenu: 'left' }" scrollTabs="true" (tabSelect)="onTabSelect($event)">
+    <super-tab *ngFor="let tabName of tabNames" [root]="root" [rootParams]="{ 'tabName' : tabName, 'categoryName' : categoryName }" title="{{ tabName }}"></super-tab>
+</super-tabs>

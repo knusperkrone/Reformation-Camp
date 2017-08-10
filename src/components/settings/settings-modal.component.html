@@ -1,0 +1,56 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button (click)="closeModal()" ion-button icon-only>
+        <ion-icon name="close"></ion-icon>
+      </button>
+        </ion-buttons>
+        <ion-title>{{ "SETTING_header" | translate }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+
+        <ion-item>
+            <ion-label>{{ "SETTING_vibration" | translate }}</ion-label>
+            <ion-toggle [(ngModel)]="vibration" (ionChange)="notify('vibration')"></ion-toggle>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>{{ "SETTING_optimized" | translate }}</ion-label>
+            <ion-toggle [(ngModel)]="optimized" (ionChange)="notify('optimized')"></ion-toggle>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>{{ "SETTING_delay" | translate }}</ion-label>
+            <ion-select [(ngModel)]="delay" (ionChange)="notify('delay')">
+                <ion-option value="5">5 {{ "SETTING_minutes" | translate }}</ion-option>
+                <ion-option value="15">15 {{ "SETTING_minutes" | translate }}</ion-option>
+                <ion-option value="20">20 {{ "SETTING_minutes" | translate }}</ion-option>
+                <ion-option value="30">30 {{ "SETTING_minutes" | translate }}</ion-option>
+                <ion-option value="45">45 {{ "SETTING_minutes" | translate }}</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>{{ "SETTING_notificationtypes" | translate }}</ion-label>
+            <ion-select [(ngModel)]="notificationTypes" multiple="true" (ionChange)="notify('notificationTypes')">
+                <ion-option value="building">{{ "SETTING_notification_building" | translate }}</ion-option>
+                <ion-option value="eating">{{ "SETTING_notification_essen" | translate }}</ion-option>
+                <ion-option value="normal">{{ "SETTING_notification_normal" | translate }}</ion-option>
+                <ion-option value="optional">{{ "SETTING_notification_optional" | translate }}</ion-option>
+                <ion-option value="leader">{{ "SETTING_notification_leader" | translate }}</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>{{ "SETTING_language" | translate }}</ion-label>
+            <ion-select [(ngModel)]="language" (ionChange)="notify('language')">
+                <ion-option value="de">{{ "SETTING_language_de" | translate }}</ion-option>
+                <ion-option value="en">{{ "SETTING_language_en" | translate }}</ion-option>
+            </ion-select>
+        </ion-item>
+
+    </ion-list>
+</ion-content>

@@ -1,0 +1,33 @@
+<ion-content>
+    <ion-list>
+        <!-- Start main list -->
+        <ion-item *ngFor="let title of tabContent" no-padding no-lines>
+            <div class="titles">
+                <ion-card (click)="toggleExpanded(title)">
+                    <ion-card-content *ngIf="title.Type == title_TITLE" class="title_title" text-wrap>
+                        <h2><b>{{ prepareText(title.Text) }}</b></h2>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+            <!-- Start text list -->
+            <ion-list *ngIf="title.expandend">
+                <ion-item *ngFor="let text of title.texts">
+                    <div class="texts">
+                        <ion-card *ngIf="text.Type == text_TEXT" class="text_text">
+                            <ion-card-content text-wrap>
+                                <div [innerHTML]="'<p>' + text.Text + '</p>'"></div>
+                            </ion-card-content>
+                        </ion-card>
+                        <ion-card *ngIf="text.Type == text_SUB_HEADING" class="text_subheading">
+                            <ion-card-content text-wrap>
+                                <div [innerHTML]="'<p><b>' + text.Text + '</b></p>'"></div>
+                            </ion-card-content>
+                        </ion-card>
+                    </div>
+                </ion-item>
+            </ion-list>
+            <!-- End text list-->
+        </ion-item>
+        <!-- END main list -->
+    </ion-list>
+</ion-content>

@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{ "NOTE_header" | translate }}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-item padding>
+        <ion-label color="primary" stacked>{{ title }}</ion-label>
+        <ion-textarea #myInput id="myInput" type="text" rows="1" placeholder="{{ 'NOTE_placeholder' | translate }}" (keyup)="resizeTextArea()" [(ngModel)]="text"></ion-textarea>
+    </ion-item>
+</ion-content>
+
+<ion-footer>
+    <ion-row>
+        <ion-col>
+            <button ion-button text-wrap block medium outline (click)="actionButton('cancel')">{{ "NOTE_cancel" | translate}}</button>
+        </ion-col>
+        <ion-col>
+            <button ion-button text-wrap block medium outline (click)="actionButton('delete')">{{ "NOTE_delete" | translate}}</button>
+        </ion-col>
+        <ion-col>
+            <button ion-button text-wrap block medium outline (click)="actionButton('save')">{{ "NOTE_save" | translate}}</button>
+        </ion-col>
+    </ion-row>
+</ion-footer>

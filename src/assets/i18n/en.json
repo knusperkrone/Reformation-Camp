@@ -1,0 +1,32 @@
+{
+
+    "APP_header": "Menu",
+    "APP_program": "Program",
+    "APP_settings": "Settings",
+    "APP_about": "About",
+
+    "ABOUT_header" : "About us",
+
+    "HOME_day" : "Day",
+
+    "NOTE_header" : "Note",
+    "NOTE_placeholder" : "Insert note here",
+    "NOTE_cancel": "Cancel",
+    "NOTE_delete": "Delete",
+    "NOTE_save": "Save",
+
+    "SETTING_header": "Settings",
+    "SETTING_vibration" : "Vibration",
+    "SETTING_minutes" : "Minutes",
+    "SETTING_optimized" : "Optimized notifications",
+    "SETTING_delay": "Notification delay",
+    "SETTING_notificationtypes" : "Notifaction types",
+    "SETTING_notification_building":  "Construction",
+    "SETTING_notification_essen": "Eating",
+    "SETTING_notification_normal": "Normal program",
+    "SETTING_notification_optional": "Optional program",
+    "SETTING_notification_leader": "Leader program",
+    "SETTING_language" : "Language",
+    "SETTING_language_de": "German",
+    "SETTING_language_en": "English"
+}

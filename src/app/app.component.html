@@ -1,0 +1,50 @@
+<ion-menu [content]="content">
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>{{ "APP_header" | translate }}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-list>
+
+            <button *ngFor="let category of categorys" menuClose ion-item (click)="openCategorie(category)">
+                <ion-icon name="bookmarks"></ion-icon>
+                {{ category }}
+            </button>
+
+            <ion-item-divider color="light"></ion-item-divider>
+
+            <button menuClose ion-item (click)="openProgram()">
+                <ion-icon name="calendar"></ion-icon>
+                 {{ 'APP_program' | translate }}
+            </button>
+
+            <!--<button menuClose ion-item (click)="openGuestBook()">
+                <ion-icon name="chatbubbles"></ion-icon>
+                Freizeit Angebote
+            </button> -->
+
+            <!--<button menuClose ion-item (click)="openGuestBook()">
+                <ion-icon name="chatbubbles"></ion-icon>
+                Gästebuch
+            </button> -->
+
+            <!--<ion-item-divider color="light"></ion-item-divider> -->
+
+            <button menuClose ion-item (click)="openSettingsModal()">
+                <ion-icon name="settings"></ion-icon>
+                 {{ 'APP_settings' | translate }}
+            </button>
+
+            <button menuClose ion-item (click)="openAboutModal()">
+                <ion-icon name="people"></ion-icon>
+                 {{ 'APP_about' | translate }}
+            </button>
+
+        </ion-list>
+    </ion-content>
+
+</ion-menu>
+
+<ion-nav id="nav" [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

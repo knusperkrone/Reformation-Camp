@@ -1,0 +1,19 @@
+.titles ion-card {
+    position: relative;
+    left : 0.5%;
+    right : 1%;
+}
+
+.texts ion-card {
+    position: relative;
+
+    .text_text {
+        left : 1%;
+        right : 1.5%;
+    }
+
+    .text_subheading {
+        left : 0.75%;
+        right : 1.25%;
+    }
+}

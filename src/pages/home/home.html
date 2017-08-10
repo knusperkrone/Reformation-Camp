@@ -1,14 +1,3 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-</ion-content>
+<super-tabs id="mainTabs" [config]="{ sideMenu: 'left' }" scrollTabs="true" (tabSelect)="onTabSelect($event)">
+    <super-tab *ngFor="let day of count" [root]="root" [rootParams]="{ 'day' : day }" title='{{ "HOME_day" | translate }} {{day + 1}}'></super-tab>
+</super-tabs>
