@@ -40,6 +40,7 @@ export class UpdaterService {
                         // Initialize database
                         this.http.get('assets/backend.sql').subscribe(
                             (data) => {
+                                this.makeToast("Initializing database");
                                 this.fillDatabase(data.text(), []);
                                 this.storage.set('database_filled', true);
                             },
@@ -88,8 +89,7 @@ export class UpdaterService {
 
         let finished = (): void => {
             // Finally
-            this.makeToast("Database updated")
-            console.log("update Finished[finished]")
+            this.makeToast("Database updated!")
             this.updateFinished.next(true);
         }
 
@@ -98,7 +98,6 @@ export class UpdaterService {
         let statements: string[] = sql.split('\n');
         let restoreNotesCount = 0;
         let restoreNotesCallback = (): void => {
-            console.log(restoreNotesCount + " == " + statements.length)
             if (++restoreNotesCount == statements.length - 1) {
                 restoreNotesFn();
             }
@@ -106,7 +105,7 @@ export class UpdaterService {
 
 
         for (let statement of statements) {
-            if (statement.length != 0)
+            if (statement.length != 0) {
                 this.database.executeSql(statement, []).then(
                     () => restoreNotesCallback(),
                     (error) => {
@@ -117,13 +116,14 @@ export class UpdaterService {
                     console.log("[fillDatabase catch] INSERT ERROR ON " + statement + "WITH: " + error);
                     restoreNotesCallback();
                 });
+            }
         }
     }
 
     private checkUpdate(): void {
         this.storage.get("db_version").then((val) => {
             // Get current Version
-            let currVersion = (val != null) ? val : 0;
+            let currVersion = (val != null) ? val : 5; // DEFAULT VALUE
 
             // Fetch online Version
             this.http.get(this.VERSION_URL)
@@ -131,7 +131,7 @@ export class UpdaterService {
                     // check if new Version is bigger than cached one and update, if nevessary
                     let newVersion = parseInt(data.text().trim());
                     if (newVersion > currVersion) {
-                        this.makeToast("Updating database..")
+                        this.makeToast("Start updating database to version: " + newVersion);
                         this.updateDatabase();
                         this.storage.set("db_version", newVersion);
                     } else {
