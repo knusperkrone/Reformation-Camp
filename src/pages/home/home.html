@@ -1,3 +1,14 @@
-<super-tabs id="mainTabs" [config]="{ sideMenu: 'left' }" scrollTabs="true" (tabSelect)="onTabSelect($event)">
-    <super-tab *ngFor="let day of count" [root]="root" [rootParams]="{ 'day' : day }" title="{{ 'HOME_day' | translate }} {{day + 1}}"></super-tab>
-</super-tabs>
+<ion-header>
+    <ion-navbar>
+        <button menuToggle ion-button icon-only>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+        <ion-title>{{ "MAIN_TITEL" | translate}} </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <super-tabs id="mainTabs" [config]="{ sideMenu: 'left' }" scrollTabs="true" (tabSelect)="onTabSelect($event)">
+        <super-tab *ngFor="let day of count" [root]="root" [rootParams]="{ 'day' : day }" title="{{ 'HOME_day' | translate }} {{day + 1}}"></super-tab>
+    </super-tabs>
+</ion-content>
