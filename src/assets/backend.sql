@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS "Kategorie_Tab_Text" (	"Id_Veranstaltung"	INTEGER NOT
 CREATE TABLE IF NOT EXISTS "Kategorie_Tab" (	"Id_Veranstaltung"	INTEGER,	"Name_Kategorie"	TEXT,	"TabName"	TEXT,	"Rang"	INTEGER,	PRIMARY KEY("Id_Veranstaltung","Name_Kategorie","TabName","Rang"),	FOREIGN KEY("Id_Veranstaltung") REFERENCES "Veranstaltung"("Id"),	FOREIGN KEY("Name_Kategorie") REFERENCES "Kategorie"("Name"));
 INSERT INTO `Veranstaltung` VALUES (3,'Reformation Camp','REFO','en',2017,4);
 INSERT INTO `Veranstaltung` VALUES (4,'Reformations Camp','REFO','de',2017,4);
-INSERT INTO `Termin` VALUES (3,0,'00:00:0','Muunday 14. August',1);
+INSERT INTO `Termin` VALUES (3,0,'00:00:0','Monday 14. August',1);
 INSERT INTO `Termin` VALUES (3,0,'08:00:0','Moning Prayer',1);
 INSERT INTO `Termin` VALUES (3,0,'08:30:0','Breakfast',4);
 INSERT INTO `Termin` VALUES (3,0,'10:00:0','Staff-Meeting',1);
