@@ -7,6 +7,7 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { Storage } from '@ionic/storage';
 import { File } from '@ionic-native/file';
+import { Network } from '@ionic-native/network';
 import { Http } from '@angular/http';
 
 import { BehaviorSubject } from 'rxjs/Rx';
@@ -26,7 +27,8 @@ export class UpdaterService {
 
 
     constructor(private storage: Storage, private sqlite: SQLite, private http: Http, private file: File, private toastCtrl: ToastController,
-        private settingService: SettingService, private notifications: NotificationService, platform: Platform) {
+        private settingService: SettingService, private notifications: NotificationService, private network: Network,
+        platform: Platform) {
         platform.ready().then(() => {
             this.sqlite.create({
                 // Open a database
@@ -121,30 +123,36 @@ export class UpdaterService {
     }
 
     private checkUpdate(): void {
-        this.storage.get("db_version").then((val) => {
-            // Get current Version
-            let currVersion = (val != null) ? val : 5; // DEFAULT VALUE
+        if (this.network.type === 'none' || this.network.type === '2g') {
+            // No/Slow Internet, so skip update at all
+            this.updateFinished.next(true);
+        } else {
+            this.storage.get("db_version").then((val) => {
+                // Get current Version
+                let currVersion = (val != null) ? val : 5; // DEFAULT VALUE
 
-            // Fetch online Version
-            this.http.get(this.VERSION_URL)
-                .subscribe((data) => {
-                    // check if new Version is bigger than cached one and update, if nevessary
-                    let newVersion = parseInt(data.text().trim());
-                    if (newVersion > currVersion) {
-                        this.makeToast("Start updating database to version: " + newVersion);
-                        this.updateDatabase();
-                        this.storage.set("db_version", newVersion);
-                    } else {
-                        console.log("update Finished[No checkupdate]")
-                        this.updateFinished.next(true);
+
+                // Fetch online Version
+                this.http.get(this.VERSION_URL)
+                    .subscribe((data) => {
+                        // check if new Version is bigger than cached one and update, if nevessary
+                        let newVersion = parseInt(data.text().trim());
+                        if (newVersion > currVersion) {
+                            this.makeToast("Start updating database to version: " + newVersion);
+                            this.updateDatabase();
+                            this.storage.set("db_version", newVersion);
+                        } else {
+                            console.log("update Finished[No checkupdate]")
+                            this.updateFinished.next(true);
+                        }
                     }
-                }
-                , (error) => {
-                    console.log("[checkUpdate] failed:" + error)
-                    console.log("update Finished[CheckUpdate failed]")
-                    this.updateFinished.next(true); // No Internet, so no update at all
-                });
-        });
+                    , (error) => {
+                        console.log("[checkUpdate] failed:" + error)
+                        console.log("update Finished[CheckUpdate failed]")
+                        this.updateFinished.next(true); // No Internet, so no update at all
+                    });
+            });
+        }
     }
 
     private updateDatabase(): void {

@@ -15,6 +15,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Vibration } from '@ionic-native/vibration';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Network } from '@ionic-native/network';
 // Libarys
 import { SuperTabsModule } from 'ionic2-super-tabs';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -78,6 +79,7 @@ import { UpdaterService } from "../providers/updater.service";
         LocalNotifications,
         Vibration,
         InAppBrowser,
+        Network,
     ]
 })
 export class AppModule { }
