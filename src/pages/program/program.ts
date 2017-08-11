@@ -1,6 +1,6 @@
 import { APIContract } from './../../model/APIContract';
 import { DatabaseService } from './../../providers/database.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavParams, IonicPage, NavController } from "ionic-angular";
 
 
@@ -25,7 +25,7 @@ export class ProgramPage {
         this.day = navParams.get('day');
 
         this.terminList = this.dbService.getVeranstaltungen(this.day);
-        this.dbService.getDatabaseState().subscribe(rdy => {
+        this.dbService.getDatabaseChanged().subscribe(rdy => {
             if (rdy && this.init) {
                 this.loadData(); // Refresh data after note got added
             }

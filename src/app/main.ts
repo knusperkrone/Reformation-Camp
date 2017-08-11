@@ -3,5 +3,5 @@ import { enableProdMode } from '@angular/core';
 
 import { AppModule } from './app.module';
 
-//enableProdMode(); // Woooop
+enableProdMode(); // Woooop
 platformBrowserDynamic().bootstrapModule(AppModule);

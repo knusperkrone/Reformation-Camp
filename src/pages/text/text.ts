@@ -24,7 +24,7 @@ export class TextComponent {
         this.tabName = navParams.get('tabName');
         this.categoryName = navParams.get('categoryName');
 
-        dbService.getDatabaseState().subscribe((rdy) => {
+        dbService.getDatabaseChanged().subscribe((rdy) => {
             this.loadData();
         });
     }

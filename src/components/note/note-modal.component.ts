@@ -2,7 +2,7 @@ import { APIContract } from './../../model/APIContract';
 import { JOINED_Termin, JOINED_Beschreibung } from './../../model/SQLContract';
 import { DatabaseService } from './../../providers/database.service';
 import { NavController } from 'ionic-angular';
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { NavParams, ToastController } from 'ionic-angular';
 
@@ -69,7 +69,7 @@ export class NoteModal implements OnInit {
             return false;
         }
 
-        if (this.dbService.addNote(noteText, this.parent.Titel, this.day, this.parent.Uhrzeit)) {
+        if (this.dbService.addNote(noteText, this.day, this.parent.Uhrzeit)) {
             // Add at the right index
             this.parent.details.splice(this.getIndex(noteText), 0, new JOINED_Beschreibung(noteText, this.noteType));
             this.parent.expanded = true; // Always expand note then

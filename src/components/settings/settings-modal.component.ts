@@ -1,10 +1,9 @@
 import { NotificationService } from './../../providers/notification.service';
 import { DatabaseService } from './../../providers/database.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Vibration } from '@ionic-native/vibration';
 import { SettingService } from './../../providers/settings.service';
 import { Component } from '@angular/core';
-import { NavParams, ViewController } from 'ionic-angular';
+import { ViewController } from 'ionic-angular';
 
 
 @Component({
@@ -53,11 +52,13 @@ export class SettingsModal {
             case "language":
                 this.translate.use(this.language);
                 // TODO: Dynamic Save
-                if (this.language == "en")
+                if (this.language == "en") {
                     this.settings.setNewVeranstaltung(3, 1, "en", "2017/08/14");
-                else
+                } else {
                     this.settings.setNewVeranstaltung(4, 1, "de", "2017/08/14");
-
+                }
+                console.log("Setting language: " + this.language);
+                this.settings.setCurrLang(this.language);
                 this.dbService.refreshData();
                 break;
         }

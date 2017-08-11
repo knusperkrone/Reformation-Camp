@@ -47,9 +47,7 @@ export class NotificationService {
 
         for (let toSchedule of toNotifyList) {
             // Calc time of the event
-            //TODO: !!!!
             scheduleDate = this.parseScheduleTime(toSchedule, startDate);
-            //console.log("Schedule at" + scheduleDate);
 
             if (scheduleDate < currTime) { // Is event in range?
                 continue;
@@ -80,9 +78,14 @@ export class NotificationService {
     }
 
     private parseScheduleTime(toSchedule: ScheduleObject, startDate: Date): Date {
-        let dayTime: string[] = toSchedule.Uhrzeit.split(":"); // Parse { hour, minute } offset
-        return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() + toSchedule.Tag,
-            parseInt(dayTime[0]), parseInt(dayTime[1]), 0, 0);
+        // Parse { hour, minute } offset
+        let dayTime: string[] = toSchedule.Uhrzeit.split(":");
+        // Hour, minute offset
+        let date = new Date(startDate);
+        date.setHours(parseInt(dayTime[0]), parseInt(dayTime[1]), 0, 0);
+        // Set day offset
+        date.setDate(date.getDate() + toSchedule.Tag);
+        return date;
     }
 
 }

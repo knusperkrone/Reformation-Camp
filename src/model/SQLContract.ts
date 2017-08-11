@@ -14,7 +14,7 @@ export class SQL_Termin {
 
 export class SQL_Beschreibung {
     constructor(public Id_Veranstaltung: number, public Id_Instanz: number, public Termin_Tag: number,
-        public Termin_Uhrzeit: string, public Text: string, Typ: string) { }
+        public Termin_Uhrzeit: string, public Text: string, public Typ: string) { }
 }
 
 export class SQL_Text {

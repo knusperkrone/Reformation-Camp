@@ -1,3 +1,5 @@
+import { UpdaterService } from './../providers/updater.service';
+import { SettingService } from './../providers/settings.service';
 import { AboutModal } from './../components/about/about-modal.component';
 import { SettingsModal } from './../components/settings/settings-modal.component';
 import { HomePage } from './../pages/home/home';
@@ -21,23 +23,56 @@ export class MyApp {
 
     private categorys: string[] = [];
 
-    constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private dbService: DatabaseService,
-        private modalCtrl: ModalController, translate : TranslateService) {
-        translate.setDefaultLang('en');
+    constructor(platform: Platform, statusBar: StatusBar, private splashScreen: SplashScreen, private dbService: DatabaseService,
+        private modalCtrl: ModalController, private updater: UpdaterService, private translate: TranslateService, private setting: SettingService) {
+
+        // Register callbacks for side menu
+        this.dbService.getDatabaseChanged().subscribe((changed) => {
+            if (changed) {
+                this.dbService.getCategoryNames().then((names) => {
+                    this.categorys = names
+                });
+            }
+        });
 
         platform.ready().then(() => {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
+            console.log("Platform ready");
             statusBar.styleDefault();
-            // Open program in the beginning
-            var subscription = dbService.getDatabaseState().subscribe((rdy) => {
-                if (rdy && this.rootPage == null) { // Only on init!
-                    dbService.getCategoryNames().then((names) => this.categorys = names);
-                    this.openProgram();
-                    splashScreen.hide();
-                    subscription.unsubscribe()
-                }
-            });
+
+            this.initServices();
+
+        });
+    }
+
+    private initServices(): void {
+        let updateSub = this.updater.isFinished().subscribe((updateFin) => {
+            if (updateFin) {
+                console.log("Update finished");
+                // Check if database is ready
+                let settingSub = this.setting.getSettingState().subscribe((settingRdy) => {
+                    if (settingRdy) {
+                        // Check if settings are loaded
+                        this.translate.setDefaultLang(this.setting.getCurrLang());
+                        console.log("Settings ready");
+                        let dbSub = this.dbService.getDatabaseReady().subscribe((dbRdy) => {
+                            if (dbRdy) {
+                                console.log("Databse ready");
+                                // Init database
+                                //this.dbService.getCategoryNames().then((names) => this.categorys = names);
+                                this.dbService.init();
+                                // Init UI
+                                if (this.rootPage == null) {
+                                    this.openProgram();
+                                    this.splashScreen.hide();
+                                }
+                                dbSub.unsubscribe();
+                            }
+                        });
+                        settingSub.unsubscribe();
+                    }
+                    updateSub.unsubscribe();
+                });
+            }
         });
     }
 

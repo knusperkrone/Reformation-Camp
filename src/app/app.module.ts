@@ -30,6 +30,7 @@ import { CategoryPage } from './../pages/category/category';
 import { SettingsModal } from './../components/settings/settings-modal.component';
 import { NoteModal } from './../components/note/note-modal.component';
 import { AboutModal } from './../components/about/about-modal.component';
+import { UpdaterService } from "../providers/updater.service";
 
 @NgModule({
     declarations: [
@@ -68,6 +69,7 @@ import { AboutModal } from './../components/about/about-modal.component';
         SplashScreen,
         DatabaseService,
         SettingService,
+        UpdaterService,
         NotificationService,
         { provide: ErrorHandler, useClass: IonicErrorHandler },
         File,
