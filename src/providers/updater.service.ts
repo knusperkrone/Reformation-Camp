@@ -130,7 +130,7 @@ export class UpdaterService {
                 .subscribe((data) => {
                     // check if new Version is bigger than cached one and update, if nevessary
                     let newVersion = parseInt(data.text().trim());
-                    if (newVersion > newVersion) {
+                    if (newVersion > currVersion) {
                         this.makeToast("Updating database..")
                         this.updateDatabase();
                         this.storage.set("db_version", newVersion);
