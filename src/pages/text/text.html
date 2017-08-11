@@ -15,7 +15,7 @@
                     <div class="texts">
                         <ion-card *ngIf="text.Type == text_TEXT" class="text_text">
                             <ion-card-content text-wrap>
-                                <div [innerHTML]="'<p>' + text.Text + '</p>'"></div>
+                                <div [innerHTML]="'<p>' + urlifyText(text.Text) + '</p>'"></div>
                             </ion-card-content>
                         </ion-card>
                         <ion-card *ngIf="text.Type == text_SUB_HEADING" class="text_subheading">

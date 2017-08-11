@@ -1,8 +1,8 @@
 import { JOINED_TabContent } from './../../model/SQLContract';
 import { IonicPage } from 'ionic-angular';
 import { NavParams } from 'ionic-angular';
-import { Component} from '@angular/core';
-import { APIContract} from '../../model/APIContract'
+import { Component } from '@angular/core';
+import { APIContract } from '../../model/APIContract'
 
 import { DatabaseService } from './../../providers/database.service';
 
@@ -40,8 +40,15 @@ export class TextComponent {
             title.expandend = !title.expandend;
     }
 
-    private prepareText(text: string) {
+    private prepareText(text: string): string {
         return this.replaceAll(text, "\\n", "\n");
+    }
+
+    private urlifyText(text: string): string {
+        var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        return text.replace(urlRegex, function (url) {
+            return "<a href=\"" + url + "\">" + url + "</a>";
+        })
     }
 
     private replaceAll(str: string, find: string, replace: string): string {
