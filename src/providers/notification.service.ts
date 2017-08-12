@@ -13,25 +13,36 @@ import { SettingService } from './settings.service';
 export class NotificationService {
 
 
-    constructor(platform: Platform, private browser: InAppBrowser, private localNotifications: LocalNotifications,
+    constructor(private browser: InAppBrowser, private localNotifications: LocalNotifications,
         private setting: SettingService, private vibration: Vibration) {
         // Register notification callbacks
-        platform.ready().then(() => {
-            this.localNotifications.registerPermission();
+        this.localNotifications.registerPermission();
 
-            this.localNotifications.on('trigger', () => {
-                if (this.setting.hasVibration())
-                    this.vibration.vibrate(500);
+        this.localNotifications.on('trigger', (notification: ILocalNotification) => {
+            if (this.setting.hasVibration()) {
+                this.vibration.vibrate(500);
+            }
+
+            let currId = notification.id;
+            this.localNotifications.get(currId + 1).then((nextNotification : ILocalNotification) => {
+                if (nextNotification.at != notification.at) {
+
+                    this.localNotifications.cancel(nextNotification.id);
+                    nextNotification.id = currId;
+                    this.localNotifications.schedule(nextNotification);
+                }
             });
-            this.localNotifications.on('click', (notification) => {
-                if (notification.id == 0)
-                    this.browser.create("www.cvjm-bayern.de").show();
-            });
+
+        });
+        this.localNotifications.on('click', (notification) => {
+            if (notification.id == 0)
+                this.browser.create("www.cvjm-bayern.de").show();
         });
     }
 
     public startScheduling(toNotifyList: ScheduleObject[]): void {
         // Cancel all other notifications!
+        console.log("Start scheduling :" + toNotifyList.length);
         this.localNotifications.cancelAll();
 
         // Cache recycleable Data
@@ -41,19 +52,20 @@ export class NotificationService {
         let currTime: Date = new Date();
 
         // Dynamic data-references
-        let toScheduleList: ILocalNotification[] = []
         let scheduleDate: Date = null
         let id = 1;
 
         for (let toSchedule of toNotifyList) {
             // Calc time of the event
-            scheduleDate = this.parseScheduleTime(toSchedule, startDate);
-
+            scheduleDate = this.parseScheduleTime(toSchedule, startDate, delay);
+            console.log("Scheduling at " + scheduleDate);
             if (scheduleDate < currTime) { // Is event in range?
                 continue;
             }
+
+
             //Add to schdule list
-            toScheduleList.push({
+            this.localNotifications.schedule({
                 id: id,
                 title: 'Es geht in ' + delay + ' Minuten weiter',
                 text: toSchedule.Titel,
@@ -61,31 +73,27 @@ export class NotificationService {
                 led: 'FF0000'
             });
 
-            if (!optmized) // Individual notifivation for every event?
-                id++;
+            id++;
         }
-        // Make notifcations
-        this.localNotifications.schedule(toScheduleList);
 
         // Guestbook notification
         if (scheduleDate != null && scheduleDate > currTime) // Check for active event
             this.localNotifications.schedule({
-                id: id,
+                id: 0,
                 title: "Schreibe einen Gästebucheintrag",
-                at: new Date(scheduleDate.getTime() + 8 * 3600), // 8 Minutes after last event XXX: ???
+                at: new Date(scheduleDate.getTime() + 120 * 3600), // 8 Minutes after last event XXX: ???
                 led: 'FF0000',
             });
     }
 
-    private parseScheduleTime(toSchedule: ScheduleObject, startDate: Date): Date {
+    private parseScheduleTime(toSchedule: ScheduleObject, startDate: Date, delay: number): Date {
         // Parse { hour, minute } offset
         let dayTime: string[] = toSchedule.Uhrzeit.split(":");
         // Hour, minute offset
         let date = new Date(startDate);
         date.setHours(parseInt(dayTime[0]), parseInt(dayTime[1]), 0, 0);
-        // Set day offset
-        date.setDate(date.getDate() + toSchedule.Tag);
-        return date;
+        date.setDate(date.getDate() + toSchedule.Tag); // Set day offset
+        return new Date(date.getTime() - delay * 60000);  // Set minute offset
     }
 
 }
