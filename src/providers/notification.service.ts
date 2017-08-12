@@ -3,6 +3,7 @@ import { Platform } from "ionic-angular";
 
 import { LocalNotifications, ILocalNotification } from '@ionic-native/local-notifications';
 import { Vibration } from '@ionic-native/vibration';
+import { Storage } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { ScheduleObject } from './../model/SQLContract';
@@ -14,22 +15,28 @@ export class NotificationService {
 
 
     constructor(private browser: InAppBrowser, private localNotifications: LocalNotifications,
-        private setting: SettingService, private vibration: Vibration) {
+        private setting: SettingService, private vibration: Vibration, private storage: Storage) {
         // Register notification callbacks
         this.localNotifications.registerPermission();
 
         this.localNotifications.on('trigger', (notification: ILocalNotification) => {
-            if (this.setting.hasVibration()) {
-                this.vibration.vibrate(500);
-            }
+            // Vibrate
+            this.storage.get("vibration").then((vibration) => {
+                if (vibration)
+                    this.vibration.vibrate(500);
+            });
 
-            let currId = notification.id;
-            this.localNotifications.get(currId + 1).then((nextNotification : ILocalNotification) => {
-                if (nextNotification.at != notification.at) {
-
-                    this.localNotifications.cancel(nextNotification.id);
-                    nextNotification.id = currId;
-                    this.localNotifications.schedule(nextNotification);
+            this.storage.get("optmized").then((isOptizmized) => {
+                if (isOptizmized) {
+                    this.localNotifications.isPresent(notification.id - 1).then((isActive) => {
+                        // Check if the old notification is active and dispose it!
+                        if (isActive) {
+                            this.localNotifications.get(notification.id - 1).then((oldNotification) => {
+                                if (oldNotification.at != notification.at)
+                                    this.localNotifications.cancel(oldNotification.id);
+                            });
+                        }
+                    });
                 }
             });
 
